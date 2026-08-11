@@ -1,4 +1,4 @@
-import { BaseEnv } from '@app/config';
+import { BaseEnv } from '@app/shared/config';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { drizzle, NodePgDatabase } from 'drizzle-orm/node-postgres';

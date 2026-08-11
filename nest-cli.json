@@ -7,22 +7,13 @@
     "webpack": true
   },
   "projects": {
-    "config": {
+    "shared": {
       "type": "library",
-      "root": "libs/config",
+      "root": "libs/shared",
       "entryFile": "index",
-      "sourceRoot": "libs/config/src",
+      "sourceRoot": "libs/shared/src",
       "compilerOptions": {
-        "tsConfigPath": "libs/config/tsconfig.lib.json"
-      }
-    },
-    "db": {
-      "type": "library",
-      "root": "libs/db",
-      "entryFile": "index",
-      "sourceRoot": "libs/db/src",
-      "compilerOptions": {
-        "tsConfigPath": "libs/db/tsconfig.lib.json"
+        "tsConfigPath": "libs/shared/tsconfig.lib.json"
       }
     },
     "products": {

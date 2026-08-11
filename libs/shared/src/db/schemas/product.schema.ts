@@ -1,6 +1,10 @@
 import { pgEnum, pgTable, timestamp, uuid, varchar } from 'drizzle-orm/pg-core';
 
-export const siteEnum = pgEnum('site', ['mercadolibre', 'garbarino']);
+export const siteEnum = pgEnum('site', [
+  'mercadolibre',
+  'garbarino',
+  'megatone',
+]);
 
 export const products = pgTable('products', {
   id: uuid('id').primaryKey().defaultRandom(),

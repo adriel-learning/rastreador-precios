@@ -1,6 +1,6 @@
 import { createZodDto } from 'nestjs-zod';
 import { z } from 'zod';
-import { SITE_VALUES } from '@app/products';
+import { SITE_VALUES } from '@app/shared/products';
 
 const UpdateProductSchema = z.object({
   url: z.url().optional(),

@@ -1,4 +1,4 @@
-import { Site } from '../common/types/site.type';
+import { Site } from '@app/shared/products/types/site.type';
 
 export interface ProductCreateInput {
   url: string;

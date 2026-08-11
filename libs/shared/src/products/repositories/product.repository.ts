@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { DbService } from '@app/db';
+import { DbService } from '@app/shared/db';
 import { eq } from 'drizzle-orm';
-import { products } from '@app/db/schemas';
+import { products } from '@app/shared/db/schemas/product.schema';
 import { Product } from '../entities/product.entity';
 import { IProductRepository } from './interfaces/product-repository.interface';
 

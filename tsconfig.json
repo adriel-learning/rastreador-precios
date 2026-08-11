@@ -22,24 +22,13 @@
     "strictBindCallApply": false,
     "noFallthroughCasesInSwitch": false,
     "paths": {
-      "@app/config": [
-        "libs/config/src"
+      "@app/shared": [
+        "libs/shared/src"
       ],
-      "@app/config/*": [
-        "libs/config/src/*"
-      ],
-      "@app/db": [
-        "libs/db/src"
-      ],
-      "@app/db/*": [
-        "libs/db/src/*"
-      ],
-      "@app/products": [
-        "libs/products/src"
-      ],
-      "@app/products/*": [
-        "libs/products/src/*"
+      "@app/shared/*": [
+        "libs/shared/src/*"
       ]
-    }
+    },
+    "types": ["node", "jest"]
   }
 }

@@ -1,7 +1,7 @@
 info:
   name: create product
   type: http
-  seq: 3
+  seq: 4
 
 http:
   method: POST
@@ -10,9 +10,9 @@ http:
     type: json
     data: |-
       {
-        "name": "Iphone 12",
-        "url": "https://elsitio.com",
-        "site": "mercadolibre"
+        "name": "Iphone 17 Pro 256Gb - Naranja Cosmico - APPLE",
+        "url": "https://www.megatone.net/producto/samsung-ung-a17-sm-a175f-4g-128gb-ng_KIT1751SSG/",
+        "site": "megatone"
       }
   auth: inherit
 

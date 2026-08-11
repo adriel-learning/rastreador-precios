@@ -1,20 +1,20 @@
 info:
   name: actualizar producto
   type: http
-  seq: 4
+  seq: 5
 
 http:
   method: PATCH
   url: http://localhost:3000/products/:id
   params:
     - name: id
-      value: cd6596b4-a5bb-4638-820c-93ae71a22400
+      value: 654a3f05-df86-49a0-9baa-45f59a41c207
       type: path
   body:
     type: json
     data: |-
       {
-        "name": "Iphone 12 el mejor"
+        "name": "Celular Galaxy A17 Sm-a175f 4/128Gb Negro - SAMSUNG"
       }
   auth: inherit
 

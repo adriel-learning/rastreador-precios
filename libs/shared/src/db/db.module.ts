@@ -1,6 +1,6 @@
 import { Global, Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { validateEnv } from '@app/config';
+import { validateEnv } from '@app/shared/config';
 import { DbService } from './db.service';
 
 @Global()

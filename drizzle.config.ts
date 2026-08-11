@@ -10,7 +10,7 @@ const url = `postgresql://${user}:${pass}@${host}:${port}/${name}`;
 
 export default defineConfig({
   dialect: 'postgresql',
-  schema: ['./libs/db/src/schemas'],
+  schema: ['./libs/shared/src/db/schema.ts'],
   out: './drizzle',
   dbCredentials: {
     url,
