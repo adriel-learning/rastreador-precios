@@ -2,14 +2,16 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { Product, IProductRepository } from '@app/shared/products';
 import { CreateProductDto } from './dtos/create-product.dto';
 import { UpdateProductDto } from './dtos/update-product.dto';
-import { PriceSnapshot } from './entities/price-snapshot.entity';
+import { PriceSnapshot } from '../../libs/shared/src/products/entities/price-snapshot.entity';
 import { MegatoneScraper } from 'src/scraping/strategies/megatone.scraper';
+import { IPriceSnapshotRepository } from '@app/shared/products/repositories/interfaces/price-snapshot.interface';
 
 @Injectable()
 export class ProductService {
   constructor(
     private readonly productRepository: IProductRepository,
     private readonly megatoneScraper: MegatoneScraper,
+    private readonly priceSnapshotRepository: IPriceSnapshotRepository,
   ) {}
 
   create(dto: CreateProductDto): Promise<Product> {
@@ -51,9 +53,11 @@ export class ProductService {
   async check(id: string): Promise<PriceSnapshot> {
     const product = await this.findById(id);
     const price = await this.megatoneScraper.getPrice(product.url);
-    return PriceSnapshot.create({
+    const priceSnapshot = PriceSnapshot.create({
       price,
       productId: id,
     });
+    await this.priceSnapshotRepository.create(priceSnapshot);
+    return priceSnapshot;
   }
 }

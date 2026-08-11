@@ -20,4 +20,10 @@ export class PriceSnapshot {
   static create(input: PriceSnapshotCreateInput): PriceSnapshot {
     return new PriceSnapshot({ ...input, id: crypto.randomUUID() });
   }
+
+  static fromPersistence(
+    input: PriceSnapshotCreateInput & { id: string },
+  ): PriceSnapshot {
+    return new PriceSnapshot(input);
+  }
 }
