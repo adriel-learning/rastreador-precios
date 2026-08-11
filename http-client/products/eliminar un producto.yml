@@ -1,0 +1,19 @@
+info:
+  name: eliminar un producto
+  type: http
+  seq: 5
+
+http:
+  method: DELETE
+  url: http://localhost:3000/products/:id
+  params:
+    - name: id
+      value: cd6596b4-a5bb-4638-820c-93ae71a22400
+      type: path
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

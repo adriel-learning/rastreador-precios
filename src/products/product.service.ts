@@ -1,40 +1,45 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { Product, ProductCreateInput } from './entities/product.entity';
-import {
-  PriceSnapshot,
-  PriceSnapshotCreateInput,
-} from './entities/price-snapshot.entity';
+import { Product, IProductRepository } from '@app/products';
+import { CreateProductDto } from './dtos/create-product.dto';
+import { UpdateProductDto } from './dtos/update-product.dto';
 
 @Injectable()
 export class ProductService {
-  private readonly products = new Map<string, Product>();
-  private readonly snapshotsByProduct = new Map<string, PriceSnapshot[]>();
+  constructor(private readonly productRepository: IProductRepository) {}
 
-  createProduct(input: ProductCreateInput): Product {
-    const product = Product.create(input);
-    this.products.set(product.id, product);
-    return product;
+  create(dto: CreateProductDto): Promise<Product> {
+    const product = Product.create(dto);
+    return this.productRepository.create(product);
   }
 
-  getProduct(productId: string): Product {
-    const product = this.products.get(productId);
+  findAll(): Promise<Product[]> {
+    return this.productRepository.findAll();
+  }
+
+  async findById(id: string): Promise<Product> {
+    const product = await this.productRepository.findById(id);
     if (!product) {
-      throw new NotFoundException(`Producto ${productId} no encontrado`);
+      throw new NotFoundException(`Producto ${id} no encontrado`);
     }
     return product;
   }
 
-  registerSnapshot(input: PriceSnapshotCreateInput): PriceSnapshot {
-    this.getProduct(input.productId);
-    const snapshot = PriceSnapshot.create(input);
-    const list = this.snapshotsByProduct.get(input.productId) ?? [];
-    list.push(snapshot);
-    this.snapshotsByProduct.set(input.productId, list);
-    return snapshot;
+  async update(id: string, dto: UpdateProductDto): Promise<Product> {
+    const product = await this.findById(id);
+    product.updateDetails(dto);
+
+    const updated = await this.productRepository.update(product);
+    if (!updated) {
+      throw new NotFoundException(`Producto ${id} no encontrado`);
+    }
+    return updated;
   }
 
-  getSnapshots(productId: string): PriceSnapshot[] {
-    this.getProduct(productId);
-    return this.snapshotsByProduct.get(productId) ?? [];
+  async remove(id: string): Promise<{ id: string }> {
+    const deleted = await this.productRepository.delete(id);
+    if (!deleted) {
+      throw new NotFoundException(`Producto ${id} no encontrado`);
+    }
+    return { id };
   }
 }

@@ -12,11 +12,11 @@ export class DbService {
 
   constructor(config: ConfigService<BaseEnv>) {
     this.pool = new Pool({
-      host: config.get('DATABASE_HOST', { infer: true }),
-      port: config.get('DATABASE_PORT', { infer: true }),
-      user: config.get('DATABASE_USER', { infer: true }),
-      password: config.get('DATABASE_PASS', { infer: true }),
-      database: config.get('DATABASE_NAME', { infer: true }),
+      host: config.get('DB_HOST', { infer: true }),
+      port: config.get('DB_PORT', { infer: true }),
+      user: config.get('DB_USER', { infer: true }),
+      password: config.get('DB_PASS', { infer: true }),
+      database: config.get('DB_NAME', { infer: true }),
     });
 
     this.db = drizzle({ client: this.pool });

@@ -33,6 +33,12 @@
       ],
       "@app/db/*": [
         "libs/db/src/*"
+      ],
+      "@app/products": [
+        "libs/products/src"
+      ],
+      "@app/products/*": [
+        "libs/products/src/*"
       ]
     }
   }

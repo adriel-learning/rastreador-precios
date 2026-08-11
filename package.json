@@ -28,6 +28,7 @@
     "@nestjs/core": "^11.0.1",
     "@nestjs/platform-express": "^11.0.1",
     "drizzle-orm": "1.0.0-rc.4",
+    "nestjs-zod": "^5.5.0",
     "pg": "^8.23.0",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",
@@ -83,7 +84,8 @@
     ],
     "moduleNameMapper": {
       "^@app/config(|/.*)$": "<rootDir>/libs/config/src/$1",
-      "^@app/db(|/.*)$": "<rootDir>/libs/db/src/$1"
+      "^@app/db(|/.*)$": "<rootDir>/libs/db/src/$1",
+      "^@app/products(|/.*)$": "<rootDir>/libs/products/src/$1"
     }
   }
 }
