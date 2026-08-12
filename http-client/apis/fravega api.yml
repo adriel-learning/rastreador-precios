@@ -1,0 +1,24 @@
+info:
+  name: fravega api
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: https://www.fravega.com/api/v1
+  body:
+    type: json
+    data: |-
+      {
+        "variables": {
+          "skus": ["22958087"]
+        },
+        "query": "query compareProducts_Shopping($skus: [NonEmptyString!], $postalCode: PostalId) {\n  skus(filtering: {codes: $skus, salesChannels: \"fravega-ecommerce\"}) {\n    took\n    total\n    results(size: 4) {\n     code\n      item {\n        id\n        title\n        slug\n        katalogCategoryId\n        brand {\n          id\n          name\n          slug\n          image\n          __typename\n        }\n        images(size: 2)\n     }\n      pricing(channel: \"fravega-ecommerce\") {\n        channel\n        listPrice\n        salePrice\n        discount\n        __typename\n      }\n  stock(postalCode: $postalCode) {\n        labels\n        availability\n        __typename\n      }\n    }\n __typename\n }\n }\n"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

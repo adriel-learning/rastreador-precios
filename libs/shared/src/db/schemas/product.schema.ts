@@ -4,6 +4,7 @@ export const siteEnum = pgEnum('site', [
   'mercadolibre',
   'garbarino',
   'megatone',
+  'fravega',
 ]);
 
 export const products = pgTable('products', {

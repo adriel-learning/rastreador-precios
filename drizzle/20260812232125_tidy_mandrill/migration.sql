@@ -1,0 +1,1 @@
+ALTER TYPE "site" ADD VALUE 'fravega';

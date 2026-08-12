@@ -8,7 +8,7 @@ http:
   url: http://localhost:3000/products/:id
   params:
     - name: id
-      value: cd6596b4-a5bb-4638-820c-93ae71a22400
+      value: 229beb30-f4e7-4921-8e10-6d785cf6d179
       type: path
   auth: inherit
 

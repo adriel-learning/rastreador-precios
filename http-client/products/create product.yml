@@ -10,9 +10,9 @@ http:
     type: json
     data: |-
       {
-        "name": "Iphone 17 Pro 256Gb - Naranja Cosmico - APPLE",
-        "url": "https://www.megatone.net/producto/samsung-ung-a17-sm-a175f-4g-128gb-ng_KIT1751SSG/",
-        "site": "megatone"
+        "name": "iPhone 17 Pro 256GB Orange",
+        "url": "https://www.fravega.com/p/iphone-17-pro-256gb-orange-782896/",
+        "site": "fravega"
       }
   auth: inherit
 
