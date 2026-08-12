@@ -4,6 +4,10 @@ import { ConfigService } from '@nestjs/config';
 import { Env } from '../../../config/env.schema';
 import { HttpService } from '@nestjs/axios';
 import { firstValueFrom } from 'rxjs';
+import {
+  MegatoneApiResponse,
+  megatoneApiResponseSchema,
+} from '../responses/megatone-api.response';
 
 @Injectable()
 export class MegatoneScraper implements PriceScraper {
@@ -15,7 +19,7 @@ export class MegatoneScraper implements PriceScraper {
   async getPrice(url: string): Promise<number> {
     const sku = this.extractSku(url);
     const response = await firstValueFrom(
-      this.http.post(
+      this.http.post<MegatoneApiResponse>(
         'https://www.megatone.net/apirecursoswebv2/api/Productos/ObtenerA',
         {
           sku,
@@ -24,12 +28,16 @@ export class MegatoneScraper implements PriceScraper {
       ),
     );
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
-    const price = response.data?.precios?.web?.promocional ?? '';
-    if (typeof price !== 'number' || price <= 0) {
-      throw new Error(`Precio inválido recibido de Megatone para sku ${sku}`);
+    const parsed = megatoneApiResponseSchema.safeParse(response.data);
+
+    if (!parsed.success) {
+      throw new Error(
+        `Respuesta de Megatone con firma inesperada: ${parsed.error.issues.map((i) => i.path.join('.')).join(', ')}`,
+      );
     }
-    return price;
+
+    const { data } = parsed;
+    return data.precios.web.promocional;
   }
 
   private extractSku(url: string): string {

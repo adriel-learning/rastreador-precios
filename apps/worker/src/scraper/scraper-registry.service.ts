@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { MegatoneScraper } from './strategies/megatone.scraper';
 import { PriceScraper } from './interfaces/price-scraper.interface';
 import { Site } from '@app/shared/products';
@@ -16,9 +16,7 @@ export class ScraperRegistry {
   resolve(site: Site): PriceScraper {
     const scraper = this.scrapers[site];
     if (!scraper)
-      throw new BadRequestException(
-        `No hay scraper registrado para el sitio: ${site}`,
-      );
+      throw new Error(`No hay scraper registrado para el sitio: ${site}`);
 
     return scraper;
   }
