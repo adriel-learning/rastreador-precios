@@ -8,9 +8,9 @@ import {
   Patch,
   Post,
 } from '@nestjs/common';
-import { CreateProductDto } from './dtos/create-product.dto';
-import { UpdateProductDto } from './dtos/update-product.dto';
-import { ProductService } from './product.service';
+import { CreateProductDto } from '@app/shared/products/dtos/create-product.dto';
+import { UpdateProductDto } from '@app/shared/products/dtos/update-product.dto';
+import { ProductService } from '@app/shared/products/product.service';
 
 @Controller('products')
 export class ProductController {
@@ -29,11 +29,6 @@ export class ProductController {
   @Get(':id')
   findById(@Param('id', ParseUUIDPipe) id: string) {
     return this.productService.findById(id);
-  }
-
-  @Get(':id/check')
-  checkProduct(@Param('id', ParseUUIDPipe) id: string) {
-    return this.productService.check(id);
   }
 
   @Patch(':id')

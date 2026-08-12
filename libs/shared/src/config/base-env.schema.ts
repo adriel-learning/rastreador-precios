@@ -9,6 +9,9 @@ export const baseEnvSchema = z.object({
   DB_PASS: z.string(),
   DB_NAME: z.string(),
 
+  REDIS_HOST: z.string(),
+  REDIS_PORT: z.coerce.number().int().positive(),
+
   MEGATONE_API_TOKEN: z.string(),
 });
 

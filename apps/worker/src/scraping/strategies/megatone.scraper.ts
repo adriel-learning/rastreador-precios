@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PriceScraper } from '../interfaces/price-scraper.interface';
 import { ConfigService } from '@nestjs/config';
-import { Env } from 'src/config/env.schema';
+import { Env } from '../../../config/env.schema';
 import { HttpService } from '@nestjs/axios';
 import { firstValueFrom } from 'rxjs';
 

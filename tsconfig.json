@@ -29,6 +29,9 @@
         "libs/shared/src/*"
       ]
     },
-    "types": ["node", "jest"]
+    "types": [
+      "node",
+      "jest"
+    ]
   }
 }

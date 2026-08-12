@@ -1,12 +1,22 @@
 {
   "$schema": "https://json.schemastore.org/nest-cli",
   "collection": "@nestjs/schematics",
-  "sourceRoot": "src",
+  "sourceRoot": "apps/rastreador-precios/src",
   "compilerOptions": {
     "deleteOutDir": true,
-    "webpack": true
+    "webpack": true,
+    "tsConfigPath": "apps/rastreador-precios/tsconfig.app.json"
   },
   "projects": {
+    "rastreador-precios": {
+      "type": "application",
+      "root": "apps/rastreador-precios",
+      "entryFile": "main",
+      "sourceRoot": "apps/rastreador-precios/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/rastreador-precios/tsconfig.app.json"
+      }
+    },
     "shared": {
       "type": "library",
       "root": "libs/shared",
@@ -16,14 +26,16 @@
         "tsConfigPath": "libs/shared/tsconfig.lib.json"
       }
     },
-    "products": {
-      "type": "library",
-      "root": "libs/products",
-      "entryFile": "index",
-      "sourceRoot": "libs/products/src",
+    "worker": {
+      "type": "application",
+      "root": "apps/worker",
+      "entryFile": "main",
+      "sourceRoot": "apps/worker/src",
       "compilerOptions": {
-        "tsConfigPath": "libs/products/tsconfig.lib.json"
+        "tsConfigPath": "apps/worker/tsconfig.app.json"
       }
     }
-  }
+  },
+  "monorepo": true,
+  "root": "apps/rastreador-precios"
 }

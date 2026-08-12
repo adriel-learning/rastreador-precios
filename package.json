@@ -1,5 +1,5 @@
 {
-  "name": "04-rastreador-precios",
+  "name": "rastreador-precios",
   "version": "0.0.1",
   "description": "",
   "author": "",
@@ -7,11 +7,15 @@
   "license": "UNLICENSED",
   "scripts": {
     "build": "nest build",
-    "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\" \"libs/**/*.ts\"",
-    "start": "nest start",
-    "start:dev": "nest start --watch",
-    "start:debug": "nest start --debug --watch",
-    "start:prod": "node dist/main",
+    "format": "prettier --write \"apps/**/*.ts\" \"libs/**/*.ts\"",
+    "start:rastreador-precios": "nest start rastreador-precios",
+    "start:dev:rastreador-precios": "nest start rastreador-precios --watch",
+    "start:debug:rastreador-precios": "nest start rastreador-precios --debug --watch",
+    "start:prod:rastreador-precios": "node dist/apps/rastreador-precios/main",
+    "start:worker": "nest start worker",
+    "start:dev:worker": "nest start worker --watch",
+    "start:debug:worker": "nest start worker --debug --watch",
+    "start:prod:worker": "node dist/apps/worker/main",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "db:studio": "drizzle-kit studio",
@@ -20,16 +24,20 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "jest --config ./apps/rastreador-precios/test/jest-e2e.json"
   },
   "dependencies": {
     "@nestjs/axios": "^4.0.1",
+    "@nestjs/bullmq": "^11.0.5",
     "@nestjs/common": "^11.0.1",
     "@nestjs/config": "^4.0.4",
     "@nestjs/core": "^11.0.1",
     "@nestjs/platform-express": "^11.0.1",
+    "@nestjs/schedule": "^6.1.3",
     "axios": "^1.19.0",
+    "bullmq": "^6.1.0",
     "drizzle-orm": "1.0.0-rc.4",
+    "ioredis": "^6.0.0",
     "nestjs-zod": "^5.5.0",
     "pg": "^8.23.0",
     "reflect-metadata": "^0.2.2",
@@ -81,8 +89,8 @@
     "coverageDirectory": "./coverage",
     "testEnvironment": "node",
     "roots": [
-      "<rootDir>/src/",
-      "<rootDir>/libs/"
+      "<rootDir>/libs/",
+      "<rootDir>/apps/"
     ],
     "moduleNameMapper": {
       "^@app/shared(|/.*)$": "<rootDir>/libs/shared/src/$1"
