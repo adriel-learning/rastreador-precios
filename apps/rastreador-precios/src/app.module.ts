@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 import { DbModule } from '@app/shared/db';
-import { ProductsModule } from '@app/shared/products/products.module';
 import { AlertRulesModule } from './alert-rules/alert-rules.module';
 import { ScrapingSchedulerModule } from './scraping-scheduler/scraping-scheduler.module';
 import { ScheduleModule } from '@nestjs/schedule';

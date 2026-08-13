@@ -3,6 +3,7 @@ import { MegatoneScraper } from './strategies/megatone.scraper';
 import { PriceScraper } from './interfaces/price-scraper.interface';
 import { Site } from '@app/shared/products';
 import { FravegaScraper } from './strategies/fravega.scraper';
+import { IntachablesScraper } from './strategies/intachables.scraper';
 
 @Injectable()
 export class ScraperRegistry {
@@ -11,10 +12,12 @@ export class ScraperRegistry {
   constructor(
     private readonly megatoneScraper: MegatoneScraper,
     private readonly fravegaScraper: FravegaScraper,
+    private readonly intachablesScraper: IntachablesScraper,
   ) {
     this.scrapers = {
       megatone: this.megatoneScraper,
       fravega: this.fravegaScraper,
+      intachables: this.intachablesScraper,
     };
   }
 

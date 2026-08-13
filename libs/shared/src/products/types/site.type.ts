@@ -3,6 +3,7 @@ export const SITE_VALUES = [
   'garbarino',
   'megatone',
   'fravega',
+  'intachables',
 ] as const;
 
 export type Site = (typeof SITE_VALUES)[number];

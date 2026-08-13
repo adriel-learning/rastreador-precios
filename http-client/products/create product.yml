@@ -10,9 +10,9 @@ http:
     type: json
     data: |-
       {
-        "name": "iPhone 17 Pro 256GB Orange",
-        "url": "https://www.fravega.com/p/iphone-17-pro-256gb-orange-782896/",
-        "site": "fravega"
+        "name": "Collar de Cinta Reforzado Nro 5",
+        "url": "https://intachables.com/product/252a7255-0649-47d9-80be-609c45e795c7",
+        "site": "intachables"
       }
   auth: inherit
 

@@ -12,6 +12,7 @@ export const siteEnum = pgEnum('site', [
   'garbarino',
   'megatone',
   'fravega',
+  'intachables',
 ]);
 
 export const products = pgTable('products', {
