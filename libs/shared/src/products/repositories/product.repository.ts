@@ -38,7 +38,12 @@ export class ProductRepository extends IProductRepository {
   async update(product: Product): Promise<Product | null> {
     const [row] = await this.dbService.db
       .update(products)
-      .set({ url: product.url, site: product.site, name: product.name })
+      .set({
+        url: product.url,
+        site: product.site,
+        name: product.name,
+        highestPrice: product.highestPrice,
+      })
       .where(eq(products.id, product.id))
       .returning();
 

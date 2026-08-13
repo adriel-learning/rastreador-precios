@@ -15,19 +15,29 @@ export class Product {
   url: string;
   site: Site;
   name: string;
+  highestPrice: number | null;
 
-  private constructor(input: ProductCreateInput & { id: string }) {
+  private constructor(
+    input: ProductCreateInput & { id: string; highestPrice: number | null },
+  ) {
     this.id = input.id;
     this.url = input.url;
     this.site = input.site;
     this.name = input.name;
+    this.highestPrice = input.highestPrice;
   }
 
   static create(input: ProductCreateInput): Product {
-    return new Product({ ...input, id: crypto.randomUUID() });
+    return new Product({
+      ...input,
+      id: crypto.randomUUID(),
+      highestPrice: null,
+    });
   }
 
-  static fromPersistence(input: ProductCreateInput & { id: string }): Product {
+  static fromPersistence(
+    input: ProductCreateInput & { id: string; highestPrice: number | null },
+  ): Product {
     return new Product(input);
   }
 
@@ -35,5 +45,11 @@ export class Product {
     if (changes.url !== undefined) this.url = changes.url;
     if (changes.site !== undefined) this.site = changes.site;
     if (changes.name !== undefined) this.name = changes.name;
+  }
+
+  updateHighestPrice(highestPrice: number): void {
+    if (this.highestPrice && this.highestPrice > highestPrice)
+      throw new Error(`El precio envíado es menor al precio histórico máximo`);
+    this.highestPrice = highestPrice;
   }
 }

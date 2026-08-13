@@ -4,7 +4,6 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { Env, envSchema } from '../config/env.schema';
 import { CheckPriceModule } from './check-price/check-price.module';
 import { DbModule } from '@app/shared/db';
-import { ScraperModule } from './scraper/scraper.module';
 
 @Module({
   imports: [
@@ -23,7 +22,6 @@ import { ScraperModule } from './scraper/scraper.module';
       }),
     }),
     CheckPriceModule,
-    ScraperModule,
   ],
   controllers: [],
   providers: [],

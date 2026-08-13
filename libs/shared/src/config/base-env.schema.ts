@@ -13,6 +13,8 @@ export const baseEnvSchema = z.object({
   REDIS_PORT: z.coerce.number().int().positive(),
 
   MEGATONE_API_TOKEN: z.string(),
+
+  TARGET_PERCENT: z.coerce.number().int().positive(),
 });
 
 export type BaseEnv = z.infer<typeof baseEnvSchema>;

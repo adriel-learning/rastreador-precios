@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PriceScraper } from '../interfaces/price-scraper.interface';
 import { ConfigService } from '@nestjs/config';
-import { Env } from '../../../config/env.schema';
+import { BaseEnv } from '../../config/base-env.schema';
 import { HttpService } from '@nestjs/axios';
 import { firstValueFrom } from 'rxjs';
 import {
@@ -13,7 +13,7 @@ import {
 export class MegatoneScraper implements PriceScraper {
   constructor(
     private readonly http: HttpService, // @nestjs/axios
-    private readonly config: ConfigService<Env>,
+    private readonly config: ConfigService<BaseEnv>,
   ) {}
 
   async getPrice(url: string): Promise<number> {

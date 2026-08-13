@@ -1,4 +1,11 @@
-import { pgEnum, pgTable, timestamp, uuid, varchar } from 'drizzle-orm/pg-core';
+import {
+  numeric,
+  pgEnum,
+  pgTable,
+  timestamp,
+  uuid,
+  varchar,
+} from 'drizzle-orm/pg-core';
 
 export const siteEnum = pgEnum('site', [
   'mercadolibre',
@@ -12,6 +19,11 @@ export const products = pgTable('products', {
   url: varchar('url', { length: 2048 }).notNull(),
   site: siteEnum('site').notNull(),
   name: varchar('name', { length: 255 }).notNull(),
+  highestPrice: numeric('price', {
+    precision: 10,
+    scale: 2,
+    mode: 'number',
+  }),
   createdAt: timestamp('created_at', { withTimezone: true })
     .defaultNow()
     .notNull(),
