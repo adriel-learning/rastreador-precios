@@ -6,9 +6,17 @@ import { PriceCheckerService } from './price-checker.service';
 import { ScraperModule } from '../scraper/scraper.module';
 import { PriceEvaluationService } from './price-evaluation.service';
 import { IProductRepository, ProductRepository } from '../products';
+import { BullModule } from '@nestjs/bullmq';
+import { ALERT_QUEUE } from '../queues/alert-notification.contract';
 
 @Module({
-  imports: [HttpModule, ScraperModule],
+  imports: [
+    HttpModule,
+    ScraperModule,
+    BullModule.registerQueue({
+      name: ALERT_QUEUE,
+    }),
+  ],
   providers: [
     {
       provide: IPriceSnapshotRepository,

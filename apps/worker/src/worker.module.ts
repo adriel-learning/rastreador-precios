@@ -4,6 +4,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { Env, envSchema } from '../config/env.schema';
 import { CheckPriceModule } from './check-price/check-price.module';
 import { DbModule } from '@app/shared/db';
+import { AlertNotificationModule } from './alert-notification/alert-notification.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { DbModule } from '@app/shared/db';
       }),
     }),
     CheckPriceModule,
+    AlertNotificationModule,
   ],
   controllers: [],
   providers: [],
