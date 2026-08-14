@@ -73,9 +73,8 @@ export class AlertRule {
     this.lastNotifiedPrice = price;
     this.lastNotifiedAt = at;
     return NotificationLog.create({
-      ruleId: this.id,
-      productId: this.productId,
-      priceQueDisparo: price,
+      alertId: this.id,
+      triggerPrice: price,
       timestamp: at,
     });
   }

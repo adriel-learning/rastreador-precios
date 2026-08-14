@@ -35,15 +35,12 @@ export class PriceEvaluationService {
 
     const umbralPrice = (product.highestPrice * (100 - TARGET_PERCENT)) / 100;
     const priceIsLow = snapshot.price < umbralPrice;
-    const activeAlert = { id: 'alert found' };
 
-    if (priceIsLow && !activeAlert) {
-      const newAlert = { id: 'hola' };
+    if (priceIsLow) {
       await this.alertQueue.add(ALERT_JOB, {
-        alertId: newAlert.id,
+        productId: product.id,
+        priceSnapshotId: snapshot.id,
       });
-    } else if (!priceIsLow && activeAlert) {
-      activeAlert.id = 'resolved';
     }
   }
 }

@@ -1,26 +1,32 @@
 export interface NotificationLogCreateInput {
-  ruleId: string;
-  productId: string;
-  priceQueDisparo: number;
+  alertId: string;
+  triggerPrice: number;
   timestamp?: Date;
 }
 
 export class NotificationLog {
   readonly id: string;
-  readonly ruleId: string;
-  readonly productId: string;
-  readonly priceQueDisparo: number;
+  readonly alertId: string;
+  readonly triggerPrice: number;
   readonly timestamp: Date;
 
   private constructor(input: NotificationLogCreateInput & { id: string }) {
     this.id = input.id;
-    this.ruleId = input.ruleId;
-    this.productId = input.productId;
-    this.priceQueDisparo = input.priceQueDisparo;
+    this.alertId = input.alertId;
+    this.triggerPrice = input.triggerPrice;
     this.timestamp = input.timestamp ?? new Date();
   }
 
   static create(input: NotificationLogCreateInput): NotificationLog {
     return new NotificationLog({ ...input, id: crypto.randomUUID() });
+  }
+
+  static fromPersistence(
+    input: NotificationLogCreateInput & {
+      id: string;
+      timestamp: Date;
+    },
+  ): NotificationLog {
+    return new NotificationLog(input);
   }
 }
