@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 import { DbModule } from '@app/shared/db';
-import { AlertRulesModule } from './alert-rules/alert-rules.module';
 import { ScrapingSchedulerModule } from './scraping-scheduler/scraping-scheduler.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { ProductHttpModule } from './products/product-http.module';
@@ -25,7 +24,6 @@ import { Env, envSchema } from '../config/env.schema';
         },
       }),
     }),
-    AlertRulesModule,
     ProductHttpModule,
     ScrapingSchedulerModule,
   ],

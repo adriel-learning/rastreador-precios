@@ -6,7 +6,7 @@ export const notificationLogs = pgTable('notification_logs', {
   alertId: uuid('alert_id')
     .notNull()
     .references(() => alertRules.id, { onDelete: 'cascade' }),
-  triggerPrice: numeric('triggerPrice', {
+  triggerPrice: numeric('trigger_price', {
     precision: 10,
     scale: 2,
     mode: 'number',

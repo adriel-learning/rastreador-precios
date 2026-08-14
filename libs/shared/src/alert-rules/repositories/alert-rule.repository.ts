@@ -17,7 +17,6 @@ export class AlertRuleRepository extends IAlertRuleRepository {
       .values({
         productId: rule.productId,
         priceSnapshotId: rule.priceSnapshotId,
-        umbral: rule.umbral,
         state: rule.state,
         lastNotifiedPrice: rule.lastNotifiedPrice,
         lastNotifiedAt: rule.lastNotifiedAt,
@@ -42,8 +41,8 @@ export class AlertRuleRepository extends IAlertRuleRepository {
     return row ? AlertRule.fromPersistence(row) : null;
   }
 
-  async findActiveByProduct(productId: string): Promise<AlertRule[]> {
-    const rows = await this.dbService.db
+  async findActiveByProduct(productId: string): Promise<AlertRule | null> {
+    const [row] = await this.dbService.db
       .select()
       .from(alertRules)
       .where(
@@ -53,14 +52,13 @@ export class AlertRuleRepository extends IAlertRuleRepository {
         ),
       );
 
-    return rows.map((row) => AlertRule.fromPersistence(row));
+    return row ? AlertRule.fromPersistence(row) : null;
   }
 
-  async update(rule: AlertRule): Promise<AlertRule | null> {
+  async update(rule: AlertRule): Promise<AlertRule> {
     const [row] = await this.dbService.db
       .update(alertRules)
       .set({
-        umbral: rule.umbral,
         state: rule.state,
         lastNotifiedPrice: rule.lastNotifiedPrice,
         lastNotifiedAt: rule.lastNotifiedAt,
@@ -68,7 +66,7 @@ export class AlertRuleRepository extends IAlertRuleRepository {
       .where(eq(alertRules.id, rule.id))
       .returning();
 
-    return row ? AlertRule.fromPersistence(row) : null;
+    return AlertRule.fromPersistence(row);
   }
 
   async delete(id: string): Promise<boolean> {

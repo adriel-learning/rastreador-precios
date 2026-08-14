@@ -8,6 +8,7 @@ import { PriceEvaluationService } from './price-evaluation.service';
 import { IProductRepository, ProductRepository } from '../products';
 import { BullModule } from '@nestjs/bullmq';
 import { ALERT_QUEUE } from '../queues/alert-notification.contract';
+import { AlertRulesModule } from '../alert-rules/alert-rules.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { ALERT_QUEUE } from '../queues/alert-notification.contract';
     BullModule.registerQueue({
       name: ALERT_QUEUE,
     }),
+    AlertRulesModule,
   ],
   providers: [
     {

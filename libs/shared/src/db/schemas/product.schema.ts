@@ -20,7 +20,7 @@ export const products = pgTable('products', {
   url: varchar('url', { length: 2048 }).notNull(),
   site: siteEnum('site').notNull(),
   name: varchar('name', { length: 255 }).notNull(),
-  highestPrice: numeric('highestPrice', {
+  highestPrice: numeric('highest_price', {
     precision: 10,
     scale: 2,
     mode: 'number',

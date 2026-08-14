@@ -16,13 +16,8 @@ export const alertRules = pgTable('alert_rules', {
   priceSnapshotId: uuid('price_snapshot_id')
     .notNull()
     .references(() => priceSnapshots.id, { onDelete: 'cascade' }),
-  umbral: numeric('umbral', {
-    precision: 10,
-    scale: 2,
-    mode: 'number',
-  }).notNull(),
   state: alertStateEnum('state').notNull(),
-  lastNotifiedPrice: numeric('lastNotifiedPrice', {
+  lastNotifiedPrice: numeric('last_notified_price', {
     precision: 10,
     scale: 2,
     mode: 'number',

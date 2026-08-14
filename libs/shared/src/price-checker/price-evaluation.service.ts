@@ -6,6 +6,7 @@ import { BaseEnv } from '../config';
 import { InjectQueue } from '@nestjs/bullmq';
 import { ALERT_JOB, ALERT_QUEUE } from '../queues/alert-notification.contract';
 import { Queue } from 'bullmq';
+import { AlertRulesService } from '../alert-rules/alert-rules.service';
 
 @Injectable()
 export class PriceEvaluationService {
@@ -14,6 +15,7 @@ export class PriceEvaluationService {
     private readonly alertQueue: Queue,
     private readonly productRepository: IProductRepository,
     private readonly configService: ConfigService<BaseEnv>,
+    private readonly alertRulesService: AlertRulesService,
   ) {}
 
   async evaluate(product: Product, snapshot: PriceSnapshot) {
@@ -35,11 +37,16 @@ export class PriceEvaluationService {
 
     const umbralPrice = (product.highestPrice * (100 - TARGET_PERCENT)) / 100;
     const priceIsLow = snapshot.price < umbralPrice;
+    const alert = await this.alertRulesService.handleEvaluationPrice(
+      product,
+      snapshot,
+      priceIsLow,
+    );
 
-    if (priceIsLow) {
+    if (alert) {
       await this.alertQueue.add(ALERT_JOB, {
-        productId: product.id,
-        priceSnapshotId: snapshot.id,
+        alertId: alert.id,
+        triggerPrice: snapshot.price,
       });
     }
   }

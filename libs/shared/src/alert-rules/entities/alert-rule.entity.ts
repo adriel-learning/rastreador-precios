@@ -1,5 +1,3 @@
-import { NotificationLog } from './notification-log.entity';
-
 const oneDayInMilisecond = 24 * 60 * 60 * 1000;
 
 export type AlertStateName = 'threshold_crossed' | 'notified' | 'resolved';
@@ -9,14 +7,12 @@ export type AlertEvaluationResult = 'notification_needed' | 'resolved';
 export interface AlertCreateInput {
   productId: string;
   priceSnapshotId: string;
-  umbral: number;
 }
 
 export class AlertRule {
   readonly id: string;
   readonly productId: string;
   readonly priceSnapshotId: string;
-  readonly umbral: number;
 
   state: AlertStateName;
   lastNotifiedPrice: number | null;
@@ -35,7 +31,6 @@ export class AlertRule {
     this.id = input.id;
     this.productId = input.productId;
     this.priceSnapshotId = input.priceSnapshotId;
-    this.umbral = input.umbral;
     this.state = input.state;
     this.lastNotifiedPrice = input.lastNotifiedPrice;
     this.lastNotifiedAt = input.lastNotifiedAt;
@@ -65,18 +60,13 @@ export class AlertRule {
     return new AlertRule(input);
   }
 
-  notify(price: number, at: Date): NotificationLog {
+  notify(price: number, at: Date): void {
     if (this.state !== 'threshold_crossed')
       throw new Error(`No se puede notificar desde ${this.state}`);
 
     this.state = 'notified';
     this.lastNotifiedPrice = price;
     this.lastNotifiedAt = at;
-    return NotificationLog.create({
-      alertId: this.id,
-      triggerPrice: price,
-      timestamp: at,
-    });
   }
 
   resolve(): void {
@@ -94,10 +84,11 @@ export class AlertRule {
         `La alerta no se puede resolver desde el estado ${this.state}`,
       );
 
-    if (!this.notificationExpired())
-      throw new Error('La última notificacion aún no expiró');
-
     this.state = 'threshold_crossed';
+  }
+
+  canReCross() {
+    return this.lastNotifiedAt && this.notificationExpired();
   }
 
   private notificationExpired(): boolean {

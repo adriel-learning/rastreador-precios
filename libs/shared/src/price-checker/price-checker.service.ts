@@ -20,11 +20,13 @@ export class PriceCheckerService {
 
     const scraper = this.scraperRegistry.resolve(product.site);
     const price = await scraper.getPrice(product.url);
-    const snapshot = PriceSnapshot.create({
-      productId,
-      price,
-    });
+    const snapshot = await this.priceSnapshotRepository.create(
+      PriceSnapshot.create({
+        productId,
+        price,
+      }),
+    );
     await this.priceEvaluationService.evaluate(product, snapshot);
-    return this.priceSnapshotRepository.create(snapshot);
+    return snapshot;
   }
 }
