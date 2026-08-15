@@ -1,14 +1,14 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { Product, IProductRepository } from '@app/shared/products';
-import { CreateProductDto } from './dtos/create-product.dto';
-import { UpdateProductDto } from './dtos/update-product.dto';
+import { CreateProductInput } from './schemas/create-product.schema';
+import { UpdateProductInput } from './schemas/update-product.schema';
 
 @Injectable()
 export class ProductService {
   constructor(private readonly productRepository: IProductRepository) {}
 
-  create(dto: CreateProductDto): Promise<Product> {
-    const product = Product.create(dto);
+  create(input: CreateProductInput): Promise<Product> {
+    const product = Product.create(input);
     return this.productRepository.create(product);
   }
 
@@ -24,9 +24,9 @@ export class ProductService {
     return product;
   }
 
-  async update(id: string, dto: UpdateProductDto): Promise<Product> {
+  async update(id: string, input: UpdateProductInput): Promise<Product> {
     const product = await this.findById(id);
-    product.updateDetails(dto);
+    product.updateDetails(input);
 
     const updated = await this.productRepository.update(product);
     if (!updated) {

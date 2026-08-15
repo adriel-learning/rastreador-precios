@@ -2,3 +2,5 @@ export * from './types/site.type';
 export * from './entities/product.entity';
 export * from './repositories/interfaces/product-repository.interface';
 export * from './repositories/product.repository';
+export * from './schemas/create-product.schema';
+export * from './schemas/update-product.schema';

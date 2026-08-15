@@ -8,8 +8,8 @@ import {
   Patch,
   Post,
 } from '@nestjs/common';
-import { CreateProductDto } from '@app/shared/products/dtos/create-product.dto';
-import { UpdateProductDto } from '@app/shared/products/dtos/update-product.dto';
+import { CreateProductDto } from './dtos/create-product.dto';
+import { UpdateProductDto } from './dtos/update-product.dto';
 import { ProductService } from '@app/shared/products/product.service';
 
 @Controller('products')
