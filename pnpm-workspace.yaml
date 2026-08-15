@@ -1,2 +1,6 @@
+allowBuilds:
+  esbuild: false
+  msgpackr-extract: false
+  unrs-resolver: false
 ignoredBuiltDependencies:
   - esbuild

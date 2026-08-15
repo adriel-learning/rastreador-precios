@@ -2,8 +2,6 @@ const oneDayInMilisecond = 24 * 60 * 60 * 1000;
 
 export type AlertStateName = 'threshold_crossed' | 'notified' | 'resolved';
 
-export type AlertEvaluationResult = 'notification_needed' | 'resolved';
-
 export interface AlertCreateInput {
   productId: string;
   priceSnapshotId: string;
@@ -81,7 +79,7 @@ export class AlertRule {
   reCross(): void {
     if (this.state !== 'notified')
       throw new Error(
-        `La alerta no se puede resolver desde el estado ${this.state}`,
+        `La alerta no se puede renotificar desde el estado ${this.state}`,
       );
 
     this.state = 'threshold_crossed';
