@@ -21,6 +21,11 @@ import { NotificationLogRepository } from './repositories/notification-log.repos
     AlertRulesService,
     NotificationLogService,
   ],
-  exports: [AlertRulesService, NotificationLogService],
+  exports: [
+    AlertRulesService,
+    NotificationLogService,
+    IAlertRuleRepository,
+    INotificationLogRepository,
+  ],
 })
 export class AlertRulesModule {}
