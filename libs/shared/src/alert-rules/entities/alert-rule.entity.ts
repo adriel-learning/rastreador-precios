@@ -15,14 +15,14 @@ export class AlertRule {
   state: AlertStateName;
   lastNotifiedPrice: number | null;
   lastNotifiedAt: Date | null;
-  createdAt: Date | null;
+  createdAt: Date;
 
   private constructor(
     input: AlertCreateInput & {
       id: string;
       lastNotifiedPrice: number | null;
       lastNotifiedAt: Date | null;
-      createdAt: Date | null;
+      createdAt: Date;
       state: AlertStateName;
     },
   ) {
@@ -52,7 +52,7 @@ export class AlertRule {
       state: AlertStateName;
       lastNotifiedPrice: number | null;
       lastNotifiedAt: Date | null;
-      createdAt: Date | null;
+      createdAt: Date;
     },
   ): AlertRule {
     return new AlertRule(input);

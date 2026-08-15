@@ -76,7 +76,7 @@ describe('megatone scraper', () => {
     jest.spyOn(httpService, 'post').mockReturnValue(of(mockResponse));
 
     await expect(megatoneScraper.getPrice(url)).rejects.toThrow(
-      `Precio inválido recibido de Megatone para sku ${sku}`,
+      `Respuesta de Megatone con firma inesperada: sku, precios`,
     );
   });
 
