@@ -28,7 +28,6 @@ export class PriceEvaluationService {
     if (product.highestPrice < snapshot.price) {
       product.updateHighestPrice(snapshot.price);
       await this.productRepository.update(product);
-      console.log('Nuevo precio máximo histórico para:\n', product.name);
     }
 
     const TARGET_PERCENT = this.configService.get('TARGET_PERCENT', {

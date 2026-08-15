@@ -24,8 +24,7 @@ export class CheckPriceProcessor extends WorkerHost {
   }
 
   async process(job: Job<CheckPriceContract>) {
-    const snapshot = await this.priceCheckerService.execute(job.data.productId);
-    console.log(snapshot);
+    await this.priceCheckerService.execute(job.data.productId);
   }
 
   @OnWorkerEvent('failed')

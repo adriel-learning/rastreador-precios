@@ -4,6 +4,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { Env, envSchema } from '../config/env.schema';
 import { CheckPriceModule } from './check-price/check-price.module';
 import { DbModule } from '@app/shared/db';
+import { LoggerModule } from '@app/shared/logger';
 import { AlertNotificationModule } from './alert-notification/alert-notification.module';
 
 @Module({
@@ -12,6 +13,7 @@ import { AlertNotificationModule } from './alert-notification/alert-notification
       isGlobal: true,
       validate: (config) => envSchema.parse(config),
     }),
+    LoggerModule,
     DbModule,
     BullModule.forRootAsync({
       inject: [ConfigService],
