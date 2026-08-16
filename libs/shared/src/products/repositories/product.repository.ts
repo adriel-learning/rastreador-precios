@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { DbService } from '@app/shared/db';
+import { DbService, DbClient } from '@app/shared/db';
 import { eq } from 'drizzle-orm';
 import { products } from '@app/shared/db/schemas/product.schema';
 import { Product } from '../entities/product.entity';
@@ -35,8 +35,11 @@ export class ProductRepository extends IProductRepository {
     return row ? Product.fromPersistence(row) : null;
   }
 
-  async update(product: Product): Promise<Product | null> {
-    const [row] = await this.dbService.db
+  async update(
+    product: Product,
+    db: DbClient = this.dbService.db,
+  ): Promise<Product | null> {
+    const [row] = await db
       .update(products)
       .set({
         url: product.url,

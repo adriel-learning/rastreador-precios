@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { DbService } from '@app/shared/db';
+import { DbService, DbClient } from '@app/shared/db';
 import { eq } from 'drizzle-orm';
 import { IPriceSnapshotRepository } from './interfaces/price-snapshot.interface';
 import { PriceSnapshot } from '../entities/price-snapshot.entity';
@@ -11,8 +11,11 @@ export class PriceSnapshotRepository extends IPriceSnapshotRepository {
     super();
   }
 
-  async create(priceSnapshot: PriceSnapshot): Promise<PriceSnapshot> {
-    const [row] = await this.dbService.db
+  async create(
+    priceSnapshot: PriceSnapshot,
+    db: DbClient = this.dbService.db,
+  ): Promise<PriceSnapshot> {
+    const [row] = await db
       .insert(priceSnapshots)
       .values({
         price: priceSnapshot.price,

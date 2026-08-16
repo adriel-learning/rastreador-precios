@@ -1,4 +1,8 @@
 import { Injectable } from '@nestjs/common';
+import { InjectQueue } from '@nestjs/bullmq';
+import { Queue } from 'bullmq';
+import { DbService } from '@app/shared/db';
+import { ALERT_JOB, ALERT_QUEUE } from '../queues/alert-notification.contract';
 import { IPriceSnapshotRepository } from '../products/repositories/interfaces/price-snapshot.interface';
 import { PriceSnapshot } from '../products/entities/price-snapshot.entity';
 import { ScraperRegistry } from '../scraper/scraper-registry.service';
@@ -12,6 +16,9 @@ export class PriceCheckerService {
     private readonly priceEvaluationService: PriceEvaluationService,
     private readonly productRepository: IProductRepository,
     private readonly priceSnapshotRepository: IPriceSnapshotRepository,
+    private readonly dbService: DbService,
+    @InjectQueue(ALERT_QUEUE)
+    private readonly alertQueue: Queue,
   ) {}
 
   async execute(productId: string): Promise<PriceSnapshot> {
@@ -20,13 +27,30 @@ export class PriceCheckerService {
 
     const scraper = this.scraperRegistry.resolve(product.site);
     const price = await scraper.getPrice(product.url);
-    const snapshot = await this.priceSnapshotRepository.create(
-      PriceSnapshot.create({
-        productId,
-        price,
-      }),
-    );
-    await this.priceEvaluationService.evaluate(product, snapshot);
+
+    const { snapshot, alert } = await this.dbService.transaction(async (tx) => {
+      const snapshot = await this.priceSnapshotRepository.create(
+        PriceSnapshot.create({
+          productId,
+          price,
+        }),
+        tx,
+      );
+      const alert = await this.priceEvaluationService.evaluate(
+        product,
+        snapshot,
+        tx,
+      );
+      return { snapshot, alert };
+    });
+
+    if (alert) {
+      await this.alertQueue.add(ALERT_JOB, {
+        alertId: alert.id,
+        triggerPrice: snapshot.price,
+      });
+    }
+
     return snapshot;
   }
 }

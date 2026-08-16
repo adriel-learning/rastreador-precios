@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { DbClient } from '@app/shared/db';
 import { IAlertRuleRepository } from './repositories/interfaces/alert-rule-repository.interface';
 import { Product } from '../products';
 import { PriceSnapshot } from '../products/entities/price-snapshot.entity';
@@ -22,9 +23,11 @@ export class AlertRulesService {
     product: Product,
     snapshot: PriceSnapshot,
     priceIsLow: boolean,
+    db?: DbClient,
   ): Promise<AlertRule | null> {
     const activeAlert = await this.alertRuleRepository.findActiveByProduct(
       product.id,
+      db,
     );
 
     if (priceIsLow && !activeAlert) {
@@ -32,7 +35,7 @@ export class AlertRulesService {
         productId: product.id,
         priceSnapshotId: snapshot.id,
       });
-      return await this.alertRuleRepository.create(alert);
+      return await this.alertRuleRepository.create(alert, db);
     }
 
     if (priceIsLow && activeAlert?.state === 'threshold_crossed')
@@ -40,7 +43,7 @@ export class AlertRulesService {
 
     if (activeAlert?.state === 'notified' && !priceIsLow) {
       activeAlert.resolve();
-      await this.alertRuleRepository.update(activeAlert);
+      await this.alertRuleRepository.update(activeAlert, db);
       return null;
     }
 
@@ -51,7 +54,7 @@ export class AlertRulesService {
 
       if (priceImproved || activeAlert.canReCross()) {
         activeAlert.reCross();
-        return await this.alertRuleRepository.update(activeAlert);
+        return await this.alertRuleRepository.update(activeAlert, db);
       }
     }
 

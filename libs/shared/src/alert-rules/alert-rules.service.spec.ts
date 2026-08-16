@@ -184,7 +184,7 @@ describe('alert-rules.service', () => {
       const evaluated = await alertRuleService.handleEvaluationPrice(product, snapshot, false);
       expect(evaluated).toBeNull();
       expect(alert.state).toBe('resolved');
-      expect(mockRepo.update).toHaveBeenCalledWith(alert);
+      expect(mockRepo.update).toHaveBeenCalledWith(alert, undefined);
     });
 
     it('precio no bajo con alerta resuelta retorna null', async () => {
@@ -248,6 +248,7 @@ describe('alert-rules.service', () => {
           priceSnapshotId: snapshot.id,
           state: 'threshold_crossed',
         }),
+        undefined,
       );
     });
 
@@ -310,7 +311,7 @@ describe('alert-rules.service', () => {
         priceSnapshotId: snapshot.id,
         state: 'threshold_crossed',
       });
-      expect(mockRepo.update).toHaveBeenCalledWith(activeAlert);
+      expect(mockRepo.update).toHaveBeenCalledWith(activeAlert, undefined);
     });
 
     it('alerta notificada, no mejoró pero expiró, renotifica', async () => {
@@ -353,7 +354,7 @@ describe('alert-rules.service', () => {
         priceSnapshotId: snapshot.id,
         state: 'threshold_crossed',
       });
-      expect(mockRepo.update).toHaveBeenCalledWith(activeAlert);
+      expect(mockRepo.update).toHaveBeenCalledWith(activeAlert, undefined);
     });
 
     it('alerta notificada, no mejoró y no expiró, retorna null', async () => {

@@ -1,8 +1,15 @@
 import { BaseEnv } from '@app/shared/config';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { drizzle, NodePgDatabase } from 'drizzle-orm/node-postgres';
+import { EmptyRelations } from 'drizzle-orm';
+import {
+  drizzle,
+  NodePgDatabase,
+  NodePgTransaction,
+} from 'drizzle-orm/node-postgres';
 import { Pool } from 'pg';
+
+export type DbClient = NodePgDatabase | NodePgTransaction<EmptyRelations>;
 
 @Injectable()
 export class DbService {
@@ -20,5 +27,11 @@ export class DbService {
     });
 
     this.db = drizzle({ client: this.pool });
+  }
+
+  async transaction<T>(
+    fn: (tx: NodePgTransaction<EmptyRelations>) => Promise<T>,
+  ): Promise<T> {
+    return this.db.transaction(fn);
   }
 }

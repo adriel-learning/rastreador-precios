@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { DbService } from '@app/shared/db';
+import { DbService, DbClient } from '@app/shared/db';
 import { and, eq, ne } from 'drizzle-orm';
 import { alertRules } from '@app/shared/db/schemas/alert-rule.schema';
 import { AlertRule } from '../entities/alert-rule.entity';
@@ -11,8 +11,11 @@ export class AlertRuleRepository extends IAlertRuleRepository {
     super();
   }
 
-  async create(rule: AlertRule): Promise<AlertRule> {
-    const [row] = await this.dbService.db
+  async create(
+    rule: AlertRule,
+    db: DbClient = this.dbService.db,
+  ): Promise<AlertRule> {
+    const [row] = await db
       .insert(alertRules)
       .values({
         productId: rule.productId,
@@ -41,8 +44,11 @@ export class AlertRuleRepository extends IAlertRuleRepository {
     return row ? AlertRule.fromPersistence(row) : null;
   }
 
-  async findActiveByProduct(productId: string): Promise<AlertRule | null> {
-    const [row] = await this.dbService.db
+  async findActiveByProduct(
+    productId: string,
+    db: DbClient = this.dbService.db,
+  ): Promise<AlertRule | null> {
+    const [row] = await db
       .select()
       .from(alertRules)
       .where(
@@ -55,8 +61,11 @@ export class AlertRuleRepository extends IAlertRuleRepository {
     return row ? AlertRule.fromPersistence(row) : null;
   }
 
-  async update(rule: AlertRule): Promise<AlertRule> {
-    const [row] = await this.dbService.db
+  async update(
+    rule: AlertRule,
+    db: DbClient = this.dbService.db,
+  ): Promise<AlertRule> {
+    const [row] = await db
       .update(alertRules)
       .set({
         state: rule.state,
