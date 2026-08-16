@@ -8,6 +8,13 @@ export abstract class IPriceSnapshotRepository {
   ): Promise<PriceSnapshot>;
   abstract findAll(): Promise<PriceSnapshot[]>;
   abstract findById(id: string): Promise<PriceSnapshot | null>;
+  abstract findLatestPerProduct(): Promise<
+    Array<{ productId: string; price: number; timestamp: Date }>
+  >;
+  abstract findByProduct(
+    productId: string,
+    limit: number,
+  ): Promise<PriceSnapshot[]>;
   abstract update(snapshot: PriceSnapshot): Promise<PriceSnapshot | null>;
   abstract delete(id: string): Promise<boolean>;
 }

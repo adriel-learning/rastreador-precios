@@ -7,9 +7,11 @@ import {
   ParseUUIDPipe,
   Patch,
   Post,
+  Query,
 } from '@nestjs/common';
 import { CreateProductDto } from './dtos/create-product.dto';
 import { UpdateProductDto } from './dtos/update-product.dto';
+import { ProductDetailsQueryDto } from './dtos/product-details-query.dto';
 import { ProductService } from '@app/shared/products/product.service';
 
 @Controller('products')
@@ -23,12 +25,15 @@ export class ProductController {
 
   @Get()
   findAll() {
-    return this.productService.findAll();
+    return this.productService.findAllWithPrice();
   }
 
   @Get(':id')
-  findById(@Param('id', ParseUUIDPipe) id: string) {
-    return this.productService.findById(id);
+  findById(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Query() query: ProductDetailsQueryDto,
+  ) {
+    return this.productService.findByIdWithDetails(id, query.limit);
   }
 
   @Patch(':id')

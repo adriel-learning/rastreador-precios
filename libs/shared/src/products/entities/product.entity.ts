@@ -4,6 +4,7 @@ export interface ProductCreateInput {
   url: string;
   site: Site;
   name: string;
+  imageUrl?: string | null;
 }
 
 export interface ProductPersistenceInput extends ProductCreateInput {
@@ -12,7 +13,7 @@ export interface ProductPersistenceInput extends ProductCreateInput {
 }
 
 export type ProductUpdateDetails = Partial<
-  Pick<Product, 'url' | 'site' | 'name'>
+  Pick<Product, 'url' | 'site' | 'name' | 'imageUrl'>
 >;
 
 export class Product {
@@ -21,6 +22,7 @@ export class Product {
   site: Site;
   name: string;
   highestPrice: number | null;
+  imageUrl: string | null;
 
   private constructor(input: ProductPersistenceInput) {
     this.id = input.id;
@@ -28,6 +30,7 @@ export class Product {
     this.site = input.site;
     this.name = input.name;
     this.highestPrice = input.highestPrice;
+    this.imageUrl = input.imageUrl ?? null;
   }
 
   static create(input: ProductCreateInput): Product {
@@ -46,6 +49,7 @@ export class Product {
     if (changes.url !== undefined) this.url = changes.url;
     if (changes.site !== undefined) this.site = changes.site;
     if (changes.name !== undefined) this.name = changes.name;
+    if (changes.imageUrl !== undefined) this.imageUrl = changes.imageUrl;
   }
 
   updateHighestPrice(highestPrice: number): void {

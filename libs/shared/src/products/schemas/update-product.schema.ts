@@ -5,6 +5,7 @@ export const updateProductSchema = z.object({
   url: z.url().optional(),
   site: z.enum(SITE_VALUES).optional(),
   name: z.string().min(1).optional(),
+  imageUrl: z.url().nullish(),
 });
 
 export type UpdateProductInput = z.infer<typeof updateProductSchema>;

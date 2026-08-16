@@ -7,3 +7,5 @@ export * from './repositories/interfaces/price-snapshot.interface';
 export * from './repositories/price-snapshot.repository';
 export * from './schemas/create-product.schema';
 export * from './schemas/update-product.schema';
+export * from './schemas/product-details-query.schema';
+export * from './price-snapshot.service';

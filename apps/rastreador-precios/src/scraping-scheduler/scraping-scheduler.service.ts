@@ -13,7 +13,7 @@ export class ScrapingSchedulerService {
     private readonly checkPriceQueue: Queue,
   ) {}
 
-  @Cron(CronExpression.EVERY_30_SECONDS)
+  @Cron(CronExpression.EVERY_10_MINUTES)
   async scrapingProducts() {
     const products = await this.productService.findAll();
     await this.checkPriceQueue.addBulk(

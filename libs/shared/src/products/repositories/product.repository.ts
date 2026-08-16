@@ -14,7 +14,12 @@ export class ProductRepository extends IProductRepository {
   async create(product: Product): Promise<Product> {
     const [row] = await this.dbService.db
       .insert(products)
-      .values({ url: product.url, site: product.site, name: product.name })
+      .values({
+        url: product.url,
+        site: product.site,
+        name: product.name,
+        imageUrl: product.imageUrl,
+      })
       .returning();
 
     return Product.fromPersistence(row);
@@ -46,6 +51,7 @@ export class ProductRepository extends IProductRepository {
         site: product.site,
         name: product.name,
         highestPrice: product.highestPrice,
+        imageUrl: product.imageUrl,
       })
       .where(eq(products.id, product.id))
       .returning();
