@@ -21,6 +21,9 @@ export const baseEnvSchema = z.object({
 
   MEGATONE_API_TOKEN: z.string(),
 
+  TELEGRAM_BOT_TOKEN: z.string(),
+  TELEGRAM_CHAT_ID: z.string(),
+
   TARGET_PERCENT: z.coerce.number().int().positive(),
 });
 

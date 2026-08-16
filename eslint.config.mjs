@@ -3,6 +3,7 @@ import eslint from '@eslint/js';
 import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended';
 import globals from 'globals';
 import tseslint from 'typescript-eslint';
+import pluginJest from 'eslint-plugin-jest'
 
 export default tseslint.config(
   {
@@ -32,4 +33,14 @@ export default tseslint.config(
       "prettier/prettier": ["error", { endOfLine: "auto" }],
     },
   },
+  {
+    files: ['**/*.spec.ts'],
+    plugins: {
+      jest: pluginJest
+    },
+    rules: {
+      '@typescript-eslint/unbound-method': 'off',
+      'jest/unbound-method': 'error',
+    },
+  }
 );

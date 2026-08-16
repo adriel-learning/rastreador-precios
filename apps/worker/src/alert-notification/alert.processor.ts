@@ -16,6 +16,8 @@ import {
 } from '@nestjs/bullmq';
 import { Job, Queue } from 'bullmq';
 import { DbService } from '@app/shared/db';
+import { TelegramNotifierService } from '@app/shared/notifications';
+import { Logger } from 'nestjs-pino';
 
 @Processor(ALERT_QUEUE)
 export class AlertProcessor extends WorkerHost {
@@ -24,6 +26,8 @@ export class AlertProcessor extends WorkerHost {
     private readonly notificationLogService: NotificationLogService,
     private readonly productsService: ProductService,
     private readonly dbService: DbService,
+    private readonly telegramNotifierService: TelegramNotifierService,
+    private readonly logger: Logger,
     @InjectQueue(ALERT_DLQ)
     private readonly alertDlq: Queue,
   ) {
@@ -33,6 +37,17 @@ export class AlertProcessor extends WorkerHost {
   async process(job: Job<AlertContract>): Promise<void> {
     const alert = await this.alertRulesService.findById(job.data.alertId);
     const product = await this.productsService.findById(alert.productId);
+
+    try {
+      await this.telegramNotifierService.sendPriceDrop({
+        productName: product.name,
+        price: job.data.triggerPrice,
+        url: product.url,
+      });
+    } catch (error) {
+      this.logger.error(error, 'No se pudo enviar la notificación de Telegram');
+      throw error;
+    }
 
     const nowDate = new Date();
     alert.notify(job.data.triggerPrice, nowDate);
@@ -44,11 +59,7 @@ export class AlertProcessor extends WorkerHost {
 
     await this.dbService.transaction(async (tx) => {
       await this.alertRulesService.update(alert, tx);
-      await this.notificationLogService.createAndLog(
-        notification,
-        product.name,
-        tx,
-      );
+      await this.notificationLogService.create(notification, tx);
     });
   }
 

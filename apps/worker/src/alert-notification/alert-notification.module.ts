@@ -8,6 +8,7 @@ import {
 } from '@app/shared/queues/alert-notification.contract';
 import { AlertRulesModule } from '@app/shared/alert-rules/alert-rules.module';
 import { ProductsModule } from '@app/shared/products/products.module';
+import { NotificationsModule } from '@app/shared/notifications';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { ProductsModule } from '@app/shared/products/products.module';
     ),
     AlertRulesModule,
     ProductsModule,
+    NotificationsModule,
   ],
   providers: [AlertProcessor, AlertDlqProcessor],
 })

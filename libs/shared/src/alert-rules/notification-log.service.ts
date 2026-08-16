@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { Logger } from 'nestjs-pino';
 import { DbClient } from '@app/shared/db';
 import { INotificationLogRepository } from './repositories/interfaces/notification-log-repository.interface';
 import { NotificationLog } from './entities/notification-log.entity';
@@ -8,21 +7,9 @@ import { NotificationLog } from './entities/notification-log.entity';
 export class NotificationLogService {
   constructor(
     private readonly notificationLogRepository: INotificationLogRepository,
-    private readonly logger: Logger,
   ) {}
 
-  async createAndLog(
-    notificationLog: NotificationLog,
-    productName: string,
-    db?: DbClient,
-  ) {
-    const created = await this.notificationLogRepository.create(
-      notificationLog,
-      db,
-    );
-    this.logger.log(
-      { alertId: created.alertId, triggerPrice: created.triggerPrice },
-      `El producto ${productName} tuvo una baja de precio`,
-    );
+  async create(notificationLog: NotificationLog, db?: DbClient) {
+    return this.notificationLogRepository.create(notificationLog, db);
   }
 }

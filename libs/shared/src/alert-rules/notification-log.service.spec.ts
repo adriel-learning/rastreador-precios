@@ -1,4 +1,3 @@
-import { Logger } from 'nestjs-pino';
 import { NotificationLog } from './entities/notification-log.entity';
 import { NotificationLogService } from './notification-log.service';
 import { INotificationLogRepository } from './repositories/interfaces/notification-log-repository.interface';
@@ -14,8 +13,8 @@ function makeLog(
 }
 
 describe('notification-log.service', () => {
-  describe('createAndLog()', () => {
-    it('llama repo.create con el log y loguea la baja con los datos devueltos', async () => {
+  describe('create()', () => {
+    it('llama repo.create con el log y devuelve el log creado', async () => {
       const inputLog = makeLog();
       const createdLog = makeLog();
       const mockRepo: jest.Mocked<INotificationLogRepository> = {
@@ -25,16 +24,12 @@ describe('notification-log.service', () => {
         update: jest.fn(),
         delete: jest.fn(),
       };
-      const mockLogger = { log: jest.fn() } as unknown as Logger;
-      const service = new NotificationLogService(mockRepo, mockLogger);
+      const service = new NotificationLogService(mockRepo);
 
-      await service.createAndLog(inputLog, 'Nuevo producto');
+      const result = await service.create(inputLog);
 
       expect(mockRepo.create).toHaveBeenCalledWith(inputLog, undefined);
-      expect(mockLogger.log).toHaveBeenCalledWith(
-        { alertId: createdLog.alertId, triggerPrice: createdLog.triggerPrice },
-        'El producto Nuevo producto tuvo una baja de precio',
-      );
+      expect(result).toBe(createdLog);
     });
   });
 });
