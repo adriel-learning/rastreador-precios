@@ -3,11 +3,19 @@ import { AlertRulesService } from '@app/shared/alert-rules/alert-rules.service';
 import { NotificationLogService } from '@app/shared/alert-rules/notification-log.service';
 import { ProductService } from '@app/shared/products/product.service';
 import {
+  ALERT_DLQ,
+  ALERT_DLQ_JOB,
   ALERT_QUEUE,
   AlertContract,
 } from '@app/shared/queues/alert-notification.contract';
-import { Processor, WorkerHost } from '@nestjs/bullmq';
-import { Job } from 'bullmq';
+import {
+  InjectQueue,
+  OnWorkerEvent,
+  Processor,
+  WorkerHost,
+} from '@nestjs/bullmq';
+import { Job, Queue } from 'bullmq';
+import { DbService } from '@app/shared/db';
 
 @Processor(ALERT_QUEUE)
 export class AlertProcessor extends WorkerHost {
@@ -15,22 +23,43 @@ export class AlertProcessor extends WorkerHost {
     private readonly alertRulesService: AlertRulesService,
     private readonly notificationLogService: NotificationLogService,
     private readonly productsService: ProductService,
+    private readonly dbService: DbService,
+    @InjectQueue(ALERT_DLQ)
+    private readonly alertDlq: Queue,
   ) {
     super();
   }
 
-  async process(job: Job<AlertContract>): Promise<any> {
+  async process(job: Job<AlertContract>): Promise<void> {
     const alert = await this.alertRulesService.findById(job.data.alertId);
+    const product = await this.productsService.findById(alert.productId);
 
-    alert.notify(job.data.triggerPrice, new Date());
-    const alertUpdated = await this.alertRulesService.update(alert);
-
-    const product = await this.productsService.findById(alertUpdated.productId);
-
+    const nowDate = new Date();
+    alert.notify(job.data.triggerPrice, nowDate);
     const notification = NotificationLog.create({
-      alertId: alertUpdated.id,
+      alertId: alert.id,
       triggerPrice: job.data.triggerPrice,
+      timestamp: nowDate,
     });
-    await this.notificationLogService.createAndLog(notification, product.name);
+
+    await this.dbService.transaction(async (tx) => {
+      await this.alertRulesService.update(alert, tx);
+      await this.notificationLogService.createAndLog(
+        notification,
+        product.name,
+        tx,
+      );
+    });
+  }
+
+  @OnWorkerEvent('failed')
+  async onFailed(job: Job<AlertContract>, error: Error) {
+    const attempts = job.opts.attempts ?? 1;
+    if (job.attemptsMade >= attempts)
+      await this.alertDlq.add(ALERT_DLQ_JOB, {
+        originalJobId: job.id,
+        data: job.data,
+        error: error.message,
+      });
   }
 }

@@ -7,8 +7,8 @@ export interface ProductCreateInput {
 }
 
 export interface ProductPersistenceInput extends ProductCreateInput {
-  id: string; 
-  highestPrice: number | null
+  id: string;
+  highestPrice: number | null;
 }
 
 export type ProductUpdateDetails = Partial<
@@ -22,9 +22,7 @@ export class Product {
   name: string;
   highestPrice: number | null;
 
-  private constructor(
-    input: ProductPersistenceInput,
-  ) {
+  private constructor(input: ProductPersistenceInput) {
     this.id = input.id;
     this.url = input.url;
     this.site = input.site;
@@ -40,9 +38,7 @@ export class Product {
     });
   }
 
-  static fromPersistence(
-    input: ProductPersistenceInput,
-  ): Product {
+  static fromPersistence(input: ProductPersistenceInput): Product {
     return new Product(input);
   }
 

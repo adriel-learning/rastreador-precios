@@ -1,18 +1,27 @@
 import { Module } from '@nestjs/common';
 import { AlertProcessor } from './alert.processor';
+import { AlertDlqProcessor } from './alert-dlq.processor';
 import { BullModule } from '@nestjs/bullmq';
-import { ALERT_QUEUE } from '@app/shared/queues/alert-notification.contract';
+import {
+  ALERT_DLQ,
+  ALERT_QUEUE,
+} from '@app/shared/queues/alert-notification.contract';
 import { AlertRulesModule } from '@app/shared/alert-rules/alert-rules.module';
 import { ProductsModule } from '@app/shared/products/products.module';
 
 @Module({
   imports: [
-    BullModule.registerQueue({
-      name: ALERT_QUEUE,
-    }),
+    BullModule.registerQueue(
+      {
+        name: ALERT_QUEUE,
+      },
+      {
+        name: ALERT_DLQ,
+      },
+    ),
     AlertRulesModule,
     ProductsModule,
   ],
-  providers: [AlertProcessor],
+  providers: [AlertProcessor, AlertDlqProcessor],
 })
 export class AlertNotificationModule {}

@@ -3,10 +3,10 @@ import {
   PriceSnapshotPersistenceInput,
   Product,
   ProductPersistenceInput,
-} from "../products";
-import { AlertRulesService } from "./alert-rules.service";
-import { AlertRule, AlertStateName } from "./entities/alert-rule.entity";
-import { IAlertRuleRepository } from "./repositories/interfaces/alert-rule-repository.interface";
+} from '../products';
+import { AlertRulesService } from './alert-rules.service';
+import { AlertRule, AlertStateName } from './entities/alert-rule.entity';
+import { IAlertRuleRepository } from './repositories/interfaces/alert-rule-repository.interface';
 
 function makePersistenceInput(
   overrides: Partial<{
@@ -60,9 +60,11 @@ describe('alert-rules.service', () => {
   describe('findById()', () => {
     it('busca la alerta correctamente', async () => {
       const mockRepo: jest.Mocked<IAlertRuleRepository> = {
-        findById: jest.fn().mockResolvedValue(
-          AlertRule.fromPersistence(makePersistenceInput({ id: 'id-123' })),
-        ),
+        findById: jest
+          .fn()
+          .mockResolvedValue(
+            AlertRule.fromPersistence(makePersistenceInput({ id: 'id-123' })),
+          ),
         create: jest.fn(),
         delete: jest.fn(),
         findActiveByProduct: jest.fn(),
@@ -103,7 +105,7 @@ describe('alert-rules.service', () => {
       const alertRuleService = new AlertRulesService(mockRepo);
       const alert = AlertRule.fromPersistence(makePersistenceInput());
       await alertRuleService.update(alert);
-      expect(mockRepo.update).toHaveBeenCalledWith(alert);
+      expect(mockRepo.update).toHaveBeenCalledWith(alert, undefined);
     });
   });
 
@@ -125,7 +127,11 @@ describe('alert-rules.service', () => {
 
       const alertRuleService = new AlertRulesService(mockRepo);
 
-      const alert = await alertRuleService.handleEvaluationPrice(product, snapshot, false);
+      const alert = await alertRuleService.handleEvaluationPrice(
+        product,
+        snapshot,
+        false,
+      );
       expect(alert).toBeNull();
       expect(mockRepo.create).not.toHaveBeenCalled();
       expect(mockRepo.update).not.toHaveBeenCalled();
@@ -137,7 +143,10 @@ describe('alert-rules.service', () => {
         makePriceSnapshotPersistenceInput({ productId: product.id, price: 10 }),
       );
       const activeAlert = AlertRule.fromPersistence(
-        makePersistenceInput({ productId: product.id, priceSnapshotId: snapshot.id }),
+        makePersistenceInput({
+          productId: product.id,
+          priceSnapshotId: snapshot.id,
+        }),
       );
 
       const mockRepo: jest.Mocked<IAlertRuleRepository> = {
@@ -151,7 +160,11 @@ describe('alert-rules.service', () => {
 
       const alertRuleService = new AlertRulesService(mockRepo);
 
-      const alert = await alertRuleService.handleEvaluationPrice(product, snapshot, false);
+      const alert = await alertRuleService.handleEvaluationPrice(
+        product,
+        snapshot,
+        false,
+      );
       expect(alert).toBeNull();
       expect(mockRepo.create).not.toHaveBeenCalled();
       expect(mockRepo.update).not.toHaveBeenCalled();
@@ -181,7 +194,11 @@ describe('alert-rules.service', () => {
 
       const alertRuleService = new AlertRulesService(mockRepo);
 
-      const evaluated = await alertRuleService.handleEvaluationPrice(product, snapshot, false);
+      const evaluated = await alertRuleService.handleEvaluationPrice(
+        product,
+        snapshot,
+        false,
+      );
       expect(evaluated).toBeNull();
       expect(alert.state).toBe('resolved');
       expect(mockRepo.update).toHaveBeenCalledWith(alert, undefined);
@@ -211,7 +228,11 @@ describe('alert-rules.service', () => {
 
       const alertRuleService = new AlertRulesService(mockRepo);
 
-      const alert = await alertRuleService.handleEvaluationPrice(product, snapshot, false);
+      const alert = await alertRuleService.handleEvaluationPrice(
+        product,
+        snapshot,
+        false,
+      );
       expect(alert).toBeNull();
       expect(mockRepo.create).not.toHaveBeenCalled();
       expect(mockRepo.update).not.toHaveBeenCalled();
@@ -227,7 +248,10 @@ describe('alert-rules.service', () => {
         findActiveByProduct: jest.fn().mockResolvedValue(null),
         create: jest.fn().mockResolvedValue(
           AlertRule.fromPersistence(
-            makePersistenceInput({ productId: product.id, priceSnapshotId: snapshot.id }),
+            makePersistenceInput({
+              productId: product.id,
+              priceSnapshotId: snapshot.id,
+            }),
           ),
         ),
         findById: jest.fn(),
@@ -238,7 +262,11 @@ describe('alert-rules.service', () => {
 
       const alertRuleService = new AlertRulesService(mockRepo);
 
-      const alert = await alertRuleService.handleEvaluationPrice(product, snapshot, true);
+      const alert = await alertRuleService.handleEvaluationPrice(
+        product,
+        snapshot,
+        true,
+      );
       expect(alert?.productId).toBe(product.id);
       expect(alert?.priceSnapshotId).toBe(snapshot.id);
       expect(alert?.state).toBe('threshold_crossed');
@@ -258,7 +286,10 @@ describe('alert-rules.service', () => {
         makePriceSnapshotPersistenceInput({ productId: product.id, price: 10 }),
       );
       const activeAlert = AlertRule.fromPersistence(
-        makePersistenceInput({ productId: product.id, priceSnapshotId: snapshot.id }),
+        makePersistenceInput({
+          productId: product.id,
+          priceSnapshotId: snapshot.id,
+        }),
       );
 
       const mockRepo: jest.Mocked<IAlertRuleRepository> = {
@@ -272,7 +303,11 @@ describe('alert-rules.service', () => {
 
       const alertRuleService = new AlertRulesService(mockRepo);
 
-      const alert = await alertRuleService.handleEvaluationPrice(product, snapshot, true);
+      const alert = await alertRuleService.handleEvaluationPrice(
+        product,
+        snapshot,
+        true,
+      );
       expect(alert?.id).toBe(activeAlert.id);
       expect(alert?.state).toBe('threshold_crossed');
       expect(mockRepo.create).not.toHaveBeenCalled();
@@ -304,7 +339,11 @@ describe('alert-rules.service', () => {
 
       const alertRuleService = new AlertRulesService(mockRepo);
 
-      const alert = await alertRuleService.handleEvaluationPrice(product, snapshot, true);
+      const alert = await alertRuleService.handleEvaluationPrice(
+        product,
+        snapshot,
+        true,
+      );
       expect(alert).toMatchObject({
         id: activeAlert.id,
         productId: product.id,
@@ -347,7 +386,11 @@ describe('alert-rules.service', () => {
 
       const alertRuleService = new AlertRulesService(mockRepo);
 
-      const alert = await alertRuleService.handleEvaluationPrice(product, snapshot, true);
+      const alert = await alertRuleService.handleEvaluationPrice(
+        product,
+        snapshot,
+        true,
+      );
       expect(alert).toMatchObject({
         id: activeAlert.id,
         productId: product.id,
@@ -390,7 +433,11 @@ describe('alert-rules.service', () => {
 
       const alertRuleService = new AlertRulesService(mockRepo);
 
-      const alert = await alertRuleService.handleEvaluationPrice(product, snapshot, true);
+      const alert = await alertRuleService.handleEvaluationPrice(
+        product,
+        snapshot,
+        true,
+      );
       expect(alert).toBeNull();
       expect(activeAlert.state).toBe('notified');
       expect(mockRepo.update).not.toHaveBeenCalled();
@@ -422,7 +469,11 @@ describe('alert-rules.service', () => {
 
       const alertRuleService = new AlertRulesService(mockRepo);
 
-      const alert = await alertRuleService.handleEvaluationPrice(product, snapshot, true);
+      const alert = await alertRuleService.handleEvaluationPrice(
+        product,
+        snapshot,
+        true,
+      );
       expect(alert).toBeNull();
       expect(activeAlert.state).toBe('notified');
       expect(mockRepo.create).not.toHaveBeenCalled();

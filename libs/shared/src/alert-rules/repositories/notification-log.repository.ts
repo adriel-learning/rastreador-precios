@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { DbService } from '@app/shared/db';
+import { DbService, DbClient } from '@app/shared/db';
 import { eq } from 'drizzle-orm';
 import { notificationLogs } from '@app/shared/db/schemas/notification-log.schema';
 import { NotificationLog } from '../entities/notification-log.entity';
@@ -11,8 +11,11 @@ export class NotificationLogRepository extends INotificationLogRepository {
     super();
   }
 
-  async create(log: NotificationLog): Promise<NotificationLog> {
-    const [row] = await this.dbService.db
+  async create(
+    log: NotificationLog,
+    db: DbClient = this.dbService.db,
+  ): Promise<NotificationLog> {
+    const [row] = await db
       .insert(notificationLogs)
       .values({
         alertId: log.alertId,

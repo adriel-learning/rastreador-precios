@@ -15,8 +15,8 @@ export class AlertRulesService {
     return alert;
   }
 
-  async update(alertRule: AlertRule) {
-    return this.alertRuleRepository.update(alertRule);
+  async update(alertRule: AlertRule, db?: DbClient) {
+    return this.alertRuleRepository.update(alertRule, db);
   }
 
   async handleEvaluationPrice(

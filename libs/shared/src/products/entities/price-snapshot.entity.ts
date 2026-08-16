@@ -5,7 +5,7 @@ export interface PriceSnapshotCreateInput {
 }
 
 export interface PriceSnapshotPersistenceInput extends PriceSnapshotCreateInput {
-  id: string
+  id: string;
 }
 
 export class PriceSnapshot {
@@ -25,9 +25,7 @@ export class PriceSnapshot {
     return new PriceSnapshot({ ...input, id: crypto.randomUUID() });
   }
 
-  static fromPersistence(
-    input: PriceSnapshotPersistenceInput,
-  ): PriceSnapshot {
+  static fromPersistence(input: PriceSnapshotPersistenceInput): PriceSnapshot {
     return new PriceSnapshot(input);
   }
 }

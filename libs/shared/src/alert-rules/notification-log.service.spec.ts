@@ -3,7 +3,9 @@ import { NotificationLog } from './entities/notification-log.entity';
 import { NotificationLogService } from './notification-log.service';
 import { INotificationLogRepository } from './repositories/interfaces/notification-log-repository.interface';
 
-function makeLog(overrides: Partial<{ alertId: string; triggerPrice: number }> = {}) {
+function makeLog(
+  overrides: Partial<{ alertId: string; triggerPrice: number }> = {},
+) {
   return NotificationLog.create({
     alertId: crypto.randomUUID(),
     triggerPrice: 150,
@@ -28,7 +30,7 @@ describe('notification-log.service', () => {
 
       await service.createAndLog(inputLog, 'Nuevo producto');
 
-      expect(mockRepo.create).toHaveBeenCalledWith(inputLog);
+      expect(mockRepo.create).toHaveBeenCalledWith(inputLog, undefined);
       expect(mockLogger.log).toHaveBeenCalledWith(
         { alertId: createdLog.alertId, triggerPrice: createdLog.triggerPrice },
         'El producto Nuevo producto tuvo una baja de precio',

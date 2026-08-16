@@ -1,19 +1,19 @@
 import {
-  CHECK_PRICE_DLQ,
-  CheckPriceContract,
-  CheckPriceDlqContract,
-} from '@app/shared/queues/check-price.contract';
+  ALERT_DLQ,
+  AlertDlqContract,
+} from '@app/shared/queues/alert-notification.contract';
 import { Processor, WorkerHost } from '@nestjs/bullmq';
 import { Logger } from 'nestjs-pino';
 import { Job } from 'bullmq';
 
-@Processor(CHECK_PRICE_DLQ)
-export class CheckPriceDlqProcessor extends WorkerHost {
+@Processor(ALERT_DLQ)
+export class AlertDlqProcessor extends WorkerHost {
   constructor(private readonly logger: Logger) {
     super();
   }
 
-  async process(job: Job<CheckPriceDlqContract<CheckPriceContract>>) {
+  process(job: Job<AlertDlqContract>): Promise<void> {
     this.logger.error(job.data, `Job ${job.data.originalJobId} movido a DLQ`);
+    return Promise.resolve();
   }
 }

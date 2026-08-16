@@ -45,10 +45,20 @@ export class PriceCheckerService {
     });
 
     if (alert) {
-      await this.alertQueue.add(ALERT_JOB, {
-        alertId: alert.id,
-        triggerPrice: snapshot.price,
-      });
+      await this.alertQueue.add(
+        ALERT_JOB,
+        {
+          alertId: alert.id,
+          triggerPrice: snapshot.price,
+        },
+        {
+          attempts: 3,
+          backoff: {
+            delay: 5000,
+            type: 'exponential',
+          },
+        },
+      );
     }
 
     return snapshot;
